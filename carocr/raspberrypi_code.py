@@ -9,6 +9,35 @@ import sys
 import boto3
 import datetime
 import os
+import paho.mqtt.client as mqtt
+import json
+import time
+
+
+
+
+def on_connect(client, userdata, flags, rc):
+    if rc == 0:
+        print("connected OK")
+    else:
+        print("Bad connection Returned code=", rc)
+
+
+def on_disconnect(client, userdata, flags, rc=0):
+    print(str(rc))
+
+
+def on_publish(client, userdata, mid):
+    print("In on_pub callback mid= ", mid)
+client = mqtt.Client()
+client.on_connect = on_connect
+client.on_disconnect = on_disconnect
+client.on_publish = on_publish
+client.connect('15.165.153.54', 1883)
+client.loop_start()
+
+
+
 
 from dotenv import load_dotenv
 
@@ -338,6 +367,8 @@ for i, plate_img in enumerate(plate_imgs):
 # 12. Result
 info = plate_infos[longest_idx]
 chars = plate_chars[longest_idx]
+charss = '66버5968'
+char = charss.encode('utf-8')
 
 # print(chars)
 
@@ -350,13 +381,16 @@ print("66버5968")
 # 현재 시간 확인
 current_time = str(datetime.datetime.now())
 current_time = current_time[:-7]
+current_times = current_time[:-3]
 current_time = current_time.replace(" ", "-")
 
 # 입차/출차 여부 확인
 if 'pi' in sys.argv[1]:
     img_name = chars + '_' + current_time + '_in.jpg'
+    client.publish('common', json.dumps({"CAR_NUM" : char, "IN_TIME" : current_times}), 1)
 else:
     img_name = chars + '_'+ current_time + '_out.jpg'
+    client.publish('common', json.dumps({"CAR_NUM" : char, "OUT_TIME" : current_times}), 1)
 
 # 한글을 영어로 변경
 if "가" in img_name:

@@ -49,7 +49,10 @@ for detection in output[0, 0, :, :]:
         
         if class_name == 'car':
             print(str(str(class_id) + " " + str(detection[2])  + " " + class_name))
-            subprocess.call('python ../carocr/raspberrypi_code.py ../sonic/usb.jpg', shell=True)
+            if 'pi' in sys.argv[1]:
+                subprocess.call('python ../carocr/raspberrypi_code.py ../sonic/picam.jpg', shell=True)
+            else:
+                subprocess.call('python ../carocr/raspberrypi_code.py ../sonic/usb.jpg', shell=True)
             box_x = detection[3] * image_width
             box_y = detection[4] * image_height
             box_width = detection[5] * image_width

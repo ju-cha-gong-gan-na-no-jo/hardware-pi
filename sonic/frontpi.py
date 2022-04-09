@@ -30,7 +30,7 @@ try :
     distance = pulse_duration * 17000
     distance = round(distance, 2)
     
-    if distance <= 25:
+    if distance <= 28:
       subprocess.call("raspistill -t 1500 -o picam.jpg",shell=True)
       print("front object detected!")
       subprocess.call("python ../detect_car/main.py picam.jpg", shell=True)
