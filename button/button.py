@@ -22,7 +22,7 @@ def on_publish(client, userdata, mid):
 
 
 def say_hello():                #콜백함수
-    client.publish('common', json.dumps({"success": "ok", "test": "한글만보내기"}), 1)
+    client.publish('common', json.dumps({ "success": "ok", "test": "관리실호출!!!"}), 1)
     pygame.mixer.music.load("/home/pi/data/bell.mp3")
     pygame.mixer.music.play()
     time.sleep(0.2)
@@ -47,6 +47,6 @@ client.loop_start()
 
 
 button.when_pressed = say_hello    #버튼이 눌렸을 때 실행될 콜백함수 지정
-button.when_released = say_goodbye #버튼이 눌렸다가 놓아졌을 때 실행될 콜백함수 지정
+#button.when_released = say_goodbye #버튼이 눌렸다가 놓아졌을 때 실행될 콜백함수 지정
 
 pause()                            # 프로세스 대기

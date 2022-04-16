@@ -1,5 +1,5 @@
 ##  https://github.com/Mactto/License_Plate_Recognition
-print("start carocr")
+
 # 1. Call some Libraries
 import cv2
 import numpy as np
@@ -14,7 +14,7 @@ import os
 import json
 import time
 
-print("step 1. import complete")
+
 
 
 # def on_connect(client, userdata, flags, rc):
@@ -39,12 +39,11 @@ print("step 1. import complete")
 
 
 
-
+print("start OCR")
 from dotenv import load_dotenv
 
 plt.style.use('dark_background')
 
-print("step 1.5. dotenv loaded")
 
 # 2. Read Input Image
 img_ori = cv2.imread(sys.argv[1])
@@ -53,11 +52,11 @@ height, width, channel = img_ori.shape
 
 plt.figure(figsize=(12, 10))
 # print(height, width, channel)
-print("step 2 complete")
+
 # 3. Convert Image to Grayscale
 gray = cv2.cvtColor(img_ori, cv2.COLOR_BGR2GRAY)
 plt.figure(figsize=(12,10))
-print("step3 complete")
+
 # 4. Adaptive Thresholding 
 img_blurred = cv2.GaussianBlur(gray, ksize=(5, 5), sigmaX=0)
 
@@ -71,7 +70,7 @@ img_blur_thresh = cv2.adaptiveThreshold(
 )
 
 img_blur_thresh = cv2.Canny(img_blur_thresh, 100, 200)
-print("step4 complete")
+
 # 4-1 GaussianBlur 비적용 / 적용 비교
 img_thresh = cv2.adaptiveThreshold(
     gray,
@@ -95,7 +94,7 @@ temp_result = np.zeros((height, width, channel), dtype=np.uint8)
 cv2.drawContours(temp_result, contours=contours, contourIdx=-1, color=(255,255,255))
 
 plt.figure(figsize=(12, 10))
-print("step5 complete")
+
 # 6. Prepare Data
 temp_result = np.zeros((height, width, channel), dtype=np.uint8)
 
@@ -116,7 +115,7 @@ for contour in contours:
     })
     
 plt.figure(figsize=(12,10))
-print("step6 complete")
+
 # 7. Select Candidates by Char Size
 MIN_AREA = 80
 MIN_WIDTH, MIN_HEIGHT=2, 8
@@ -143,7 +142,7 @@ for d in possible_contours:
     
 plt.figure(figsize=(12, 10))
 plt.imshow(temp_result, cmap='gray')
-print("step 7 complete")
+
 # 8. Select Candidates by Arrangement of Contours
 MAX_DIAG_MULTIPLYER = 5
 MAX_ANGLE_DIFF = 12.0
@@ -217,7 +216,7 @@ for r in matched_result:
 
 plt.figure(figsize=(12, 10))
 plt.imshow(temp_result, cmap='gray')
-print("step8 complete")
+
 # 9. Rotate Plate Images
 PLATE_WIDTH_PADDING = 1.3 # 1.3
 PLATE_HEIGHT_PADDING = 1.5 # 1.5
@@ -272,7 +271,7 @@ for i, matched_chars in enumerate(matched_result):
     
     plt.subplot(len(matched_result), 1, i+1)
     plt.imshow(img_cropped, cmap='gray')
-print("step9 complete")
+
 # 10. Another Thresholding
 
 longest_idx, longest_text = -1, 0
@@ -307,7 +306,7 @@ for i, plate_img in enumerate(plate_imgs):
                 plate_max_y = y + h
                 
     img_result = plate_img[plate_min_y:plate_max_y, plate_min_x:plate_max_x]
-print("step10 complete")
+
 # 11. Find Chars
 longest_idx, longest_text = -1, 0
 plate_chars = []
@@ -365,20 +364,20 @@ for i, plate_img in enumerate(plate_imgs):
 
     plt.subplot(len(plate_imgs), 1, i+1)
     plt.imshow(img_result, cmap='gray')
-print("step11 complete")
+
 # 12. Result
 info = plate_infos[longest_idx]
 chars = plate_chars[longest_idx]
 charss = '66버5968'
 char = charss.encode('utf-8')
 
-print(chars)
+print(charss)
 
 img_out = img_ori.copy()
 
 cv2.rectangle(img_out, pt1=(info['x'], info['y']), pt2=(info['x']+info['w'], info['y']+info['h']), color=(255,0,0), thickness=2)
 #print(info)
-#print("66버5968")
+
 
 # 현재 시간 확인
 current_time = str(datetime.datetime.now())
@@ -386,25 +385,23 @@ current_time = current_time[:-7]
 current_times = current_time[:-3]
 current_time = current_time.replace(" ", "-")
 
-print("step11 current time complete")
 # 입차/출차 여부 확인
 if 'pi' in sys.argv[1]:
-    img_name = chars + '_' + current_time + '_in.jpg'
+    img_name = charss + '_in.jpg'
     headers = {'Content-Type': 'application/json; charset=utf-8'}
-    data_carnum = {"car_num" : chars, "time" : current_times}
-    res = requests.post('http://52.79.193.214:3000/python', data=json.dumps(data_carnum), headers=headers)
+    data_carnum = {"car_num" : charss, "time" : current_times, "member_type" : "고객"}
+    res = requests.post('http://15.165.153.54:3000/python', data=json.dumps(data_carnum), headers=headers)
     # print(str(res.status_code) + " | " + res.text)
-    # client.publish('common', json.dumps({"type": "2","CAR_NUM" : chars, "IN_TIME" : current_times}), 1)
+    # client.publish('common', json.dumps({"type": "1","CAR_NUM" : charss, "IN_TIME" : current_times}), 1)
 
-    # client.publish('common', json.dumps({"type": "2", "CAR_NUM" : chars, "IN_TIME" : current_times}), 1)
+    # client.publish('common', json.dumps({"type": "1", "CAR_NUM" : charss, "IN_TIME" : current_times}), 1)
 else:
-    img_name = chars + '_'+ current_time + '_out.jpg'
+    img_name = charss + '_out.jpg'
     headers = {'Content-Type': 'application/json; charset=utf-8'}
-    data_carnum = {"car_num" : chars, "time" : current_times}
-    res = requests.post('http://52.79.193.214:3000/out', data=json.dumps(    data_carnum), headers=headers)
-    # client.publish('common', json.dumps({"car_num" : chars, "time" : current_times}), 1)
+    data_carnum = {"car_num" : charss, "time" : current_times, "member_type": "고객"}
+    res = requests.post('http://15.165.153.34:3000/python', data=json.dumps(data_carnum), headers=headers)
+    # client.publish('common', json.dumps({"type": "3", "CAR_NUM" : chars, "OUT_TIME" : current_times}), 1)
 
-print("step11 api request complete")
 # 한글을 영어로 변경
 if "가" in img_name:
     img_name = img_name.replace("가", "ga")
@@ -415,7 +412,7 @@ cv2.imwrite(img_name, img_out)
 plt.figure(figsize=(12, 10))
 
 load_dotenv()
-print("step12 complete")
+
 # 13. upload to Amazon S3
 ACCESS_KEY_ID = os.environ.get("accessKeyId")
 ACCESS_SECRET_KEY = os.environ.get("secretAccessKey")
@@ -429,4 +426,3 @@ def upload(file):
 upload(img_name)
 # print("filename ", img_name, "uploaded to S3!")
 print("image file uploaded to S3!")
-print("step13 complete")

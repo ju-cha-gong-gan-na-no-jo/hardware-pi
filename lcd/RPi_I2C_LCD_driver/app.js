@@ -20,10 +20,10 @@ axios({
 })
   .then(function (response) {
     console.log(response.data)
-    let number = response.data["now_place"]
+    let number = response.data["JUCHA_NUMBER"]
     console.log(number)
     require('child_process').execSync(`python3 /home/pi/data/lcd/RPi_I2C_LCD_driver/example.py ${number}`);
-    setTimeout(() => process.exit(0), 10000);
+    setTimeout(() => process.exit(0), 4000);
   })
   .catch(function (error) {
     console.log(error);

@@ -50,10 +50,9 @@ for detection in output[0, 0, :, :]:
         if class_name == 'car':
             print(str(str(class_id) + " " + str(detection[2])  + " " + class_name))
             if 'pi' in sys.argv[1]:
-                print("before call frontpi.py")
-                subprocess.call('python3 ../carocr/raspberrypi_code.py ../sonic/picam.jpg', shell=True)
+                subprocess.call('python3 ../carocr/testin2.py ../sonic/picam.jpg', shell=True)
             else:
-                subprocess.call('python3 ../carocr/raspberrypi_code.py ../sonic/usb.jpg', shell=True)
+                subprocess.call('python3 ../carocr/testout2.py ../sonic/usb.jpg', shell=True)
             box_x = detection[3] * image_width
             box_y = detection[4] * image_height
             box_width = detection[5] * image_width
@@ -63,8 +62,8 @@ for detection in output[0, 0, :, :]:
 
 
 
+
 image = cv2.resize(image, (600,400))
-print("detect car complete")
 cv2.imshow('image', image)
 # cv2.imwrite("image_box_text.jpg",image)
 

@@ -1,6 +1,8 @@
 import RPi.GPIO as GPIO
 import time
 import subprocess
+import pygame
+pygame.mixer.init()
 
 GPIO.setmode(GPIO.BCM)
 
@@ -29,8 +31,10 @@ try :
     pulse_duration = pulse_end - pulse_start
     distance = pulse_duration * 17000
     distance = round(distance, 2)
-    if distance <= 30:
+    if distance <= 28:
       subprocess.call("fswebcam -d /dev/video0 -r 1280x720 --no-banner usb.jpg",shell = True)
+      pygame.mixer.music.load("/home/pi/data/photo.mp3")
+      pygame.mixer.music.play()
       time.sleep(3)
       subprocess.call("python3 ../detect_car/testout.py usb.jpg", shell=True)
 
