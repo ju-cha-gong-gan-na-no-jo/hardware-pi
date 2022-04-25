@@ -1,17 +1,17 @@
 ##  https://github.com/Mactto/License_Plate_Recognition
 print("start carocr")
 # 1. Call some Libraries
-import cv2
-import numpy as np
-import matplotlib.pyplot as plt
-import pytesseract
-import requests
-import sys
-import boto3
+import cv2                   #오픈cv
+import numpy as np            # 행렬 다루는 라이브러리
+import matplotlib.pyplot as plt     # 시각화
+import pytesseract    #글자 추출
+import requests   #restapi
+import sys     #아규벡터
+import boto3   #s3 모듈
 import datetime
-import os
-# import paho.mqtt.client as mqtt
-import json
+import os              # 사진 다운로드 자동 디렉토리 접근할수 있도록 해줌 (다운시)
+# import paho.mqtt.client as mqtt    mqtt
+import json 
 import time
 
 print("step 1. import complete")
@@ -40,7 +40,7 @@ print("step 1. import complete")
 
 
 
-from dotenv import load_dotenv
+from dotenv import load_dotenv            # 키 숨기기 보안 필수
 
 plt.style.use('dark_background')
 
@@ -392,7 +392,7 @@ if 'pi' in sys.argv[1]:
     img_name = chars + '_' + current_time + '_in.jpg'
     headers = {'Content-Type': 'application/json; charset=utf-8'}
     data_carnum = {"car_num" : chars, "time" : current_times}
-    res = requests.post('http://52.79.193.214:3000/python', data=json.dumps(data_carnum), headers=headers)
+    res = requests.post('http://52.79.193.214:3000/python', data=json.dumps(data_carnum), headers=headers)   # rest api 쏘는거
     # print(str(res.status_code) + " | " + res.text)
     # client.publish('common', json.dumps({"type": "2","CAR_NUM" : chars, "IN_TIME" : current_times}), 1)
 
