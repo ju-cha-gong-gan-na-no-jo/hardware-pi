@@ -63,7 +63,7 @@ for detection in output[0, 0, :, :]:
 
 
 
-image = cv2.resize(image, (600,400))
+image = cv2.resize(image, (600,400)) #출력되는 사진 사이즈 조정
 print("detect car complete")
 cv2.imshow('image', image)
 # cv2.imwrite("image_box_text.jpg",image)
