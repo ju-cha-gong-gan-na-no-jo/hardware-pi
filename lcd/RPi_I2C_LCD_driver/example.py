@@ -15,7 +15,7 @@ import sys
 # 2019-06-25
 '''
 # include the library 
-import RPi_I2C_driver
+import RPi_I2C_driver    #깃에서 받았다.!
 from time import *
 
 # make custom characters - eleparts logo:
@@ -117,8 +117,8 @@ lcd = RPi_I2C_driver.lcd(0x27)
 import sys
 # Print a message to the LCD.
 #lcd.print("Hello")
-lcd.lcd_display_string("  EMPTY PLACE",1)
-lcd.lcd_display_string("       "+sys.argv[1],2)
+lcd.lcd_display_string("  EMPTY PLACE",1)    # 실행시 python3 example.py 13
+lcd.lcd_display_string("       "+sys.argv[1],2)   # 파라미터 실행시에 파라미터를 넣어주는 함수같은거 아규먼트 벡터
 sleep(1)
 
 # At 0.5c second interval " World!!!" Print
