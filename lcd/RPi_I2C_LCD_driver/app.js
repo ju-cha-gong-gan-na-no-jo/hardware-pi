@@ -16,13 +16,13 @@ app.use(cookieParser());
 axios({
   method: 'get',
   url: 'http://15.165.153.54:3000/lcd',
-//  responseType: 'stream'
+//  responseType: 'stream'   #필요없는거 에러발생시키는 녀석
 })
   .then(function (response) {
     console.log(response.data)
     let number = response.data["JUCHA_NUMBER"]
     console.log(number)
-    require('child_process').execSync(`python3 /home/pi/data/lcd/RPi_I2C_LCD_driver/example.py ${number}`);
+    require('child_process').execSync(`python3 /home/pi/data/lcd/RPi_I2C_LCD_driver/example.py ${number}`);    # 자바스크립트에서 문장 안에 변수를 집어 넣는 방식 ${} 중요한게 전체 문장을 백틱으로 묶어야함
     setTimeout(() => process.exit(0), 4000);
   })
   .catch(function (error) {
